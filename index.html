@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain Gaming Labs | Home</title>
+    <link rel="icon" href="img/icon.webp">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <header>
+        <!-- Logo -->
+        <div class="logo">
+            <a href="index.html"><img src="img/cgl.png" alt="Logo"></a>
+        </div>
+    
+        <!-- Navigation Menu -->
+        <nav id="menu">
+            <a href="games.html">Games</a>
+        </nav>
+    
+        <!-- Hamburger Icon for Mobile -->
+        <div class="hamburger" id="hamburger">
+            <div></div>
+            <div></div>
+        </div>
+    </header>
+
+    <main>
+<div class="hero">
+    <div class="intro">
+        <h1>
+            Welcome to
+            <br>
+            CHAIN GAMING LABS
+        </h1>
+        <p>
+            We're thrilled to have you join us on an incredible journey into the future of gaming. At Chain Gaming Labs,
+            we're
+            passionate about creating groundbreaking experiences that put players at the heart of the action. Whether
+            you're a
+            seasoned gamer or new to the world of blockchain, you're in the right place to discover innovative gameplay,
+            true
+            ownership, and a community that celebrates creativity and fun.
+            <br><br>
+            Dive in, explore our projects, and become a part of a revolution that's transforming the gaming landscape.
+            Together,
+            we'll build the games of tomorrow, today.
+        </p>
+    </div>
+    <a href="games.html" class="cta-button">Explore Our Games</a>
+</div>
+
+        <div class="about">
+            <h2>About Us</h2>
+            <p>
+                At Chain Gaming Labs, we're revolutionizing the gaming industry with cutting-edge blockchain technology.
+                Our mission is to create immersive, decentralized gaming experiences that empower players through true ownership
+                and innovative gameplay.
+                By leveraging the power of blockchain, we ensure transparency, security, and an engaging environment where
+                gamers can truly thrive.
+            </p>
+            <p>
+                Founded by a team of passionate gamers and tech enthusiasts, Chain Gaming Labs is dedicated to pushing the
+                boundaries
+                of what's possible in the digital gaming world. Join us on our journey as we build the future of gaming, one
+                block at a time.
+            </p>
+        </div>
+        
+        <div class="features">
+            <!-- Card 1 -->
+            <div class="feature-card">
+                <img src="img/display.png" alt="Transparency Icon">
+                <h3>Transparency</h3>
+                <p>
+                    Blockchain ensures every transaction and action is traceable, fostering trust in our gaming ecosystem.
+                </p>
+            </div>
+        
+            <!-- Card 2 -->
+            <div class="feature-card">
+                <img src="img/security.png" alt="Security Icon">
+                <h3>Security</h3>
+                <p>
+                    Advanced security measures keep your data and assets safe while you enjoy a seamless gaming experience.
+                </p>
+            </div>
+        
+            <!-- Card 3 -->
+            <div class="feature-card">
+                <img src="img/innovation.png" alt="Innovation Icon">
+                <h3>Innovation</h3>
+                <p>
+                    Pioneering decentralized gameplay to offer players ownership of in-game assets and a new level of immersion.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section contact">
+                <h3>Contact Us</h3>
+                <p>Email:<br>the10webdev@gmail.com</p>
+            </div>
+
+            <div class="footer-section social">
+                <h3>Follow Us</h3>
+                <a href="#"><i class="fa fa-youtube-play" style="font-size:48px;color:red"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-navigation">
+                <a href="index.html">Home</a>
+                <a href="games.html">Games</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <p>&copy; 2024 Chain Gaming Labs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+
+        hamburger.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+    </script>
+
+</body>
+
+</html>

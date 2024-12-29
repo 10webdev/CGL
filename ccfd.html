@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain Gaming Labs | Chain CFD Trading Game</title>
+    <link rel="icon" href="img/icon.webp">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        canvas {
+            border: 1px solid lightblue;
+            border-radius: 5px;
+            display: block;
+            margin: 10px auto;
+            cursor: pointer;
+            width: 98%;
+        }
+
+        #controls {
+            position: absolute;
+            top: 80px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 5px;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        #controls div {
+            margin-bottom: 10px;
+        }
+
+        #controls button {
+            padding: 10px;
+            margin-right: 5px;
+        }
+
+        #reset-balance-button{
+            margin: 0 auto;
+            width: fit-content;
+            padding: 5px 10px;
+            background-color: #007bff;
+            border-radius: 10px;
+            font-weight: 800;
+        }
+
+        .trades-container {
+            position: relative;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 98%;
+            min-height: 350px;
+            overflow-y: auto;
+        }
+
+        .trades-header {
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 5px;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+
+        #open-trades,
+        #closed-trades {
+            margin-bottom: 10px;
+        }
+
+        #open-trades div,
+        #closed-trades div {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .trade {
+            padding: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+            width: 100%;
+        }
+
+        .trade.green {
+            background-color: #e6ffe6;
+            width: 98%;
+            margin: 1px auto;
+        }
+
+        .trade.red {
+            background-color: #ffe6e6;
+            width: 98%;
+            margin: 1px auto;
+        }
+
+        #balance {
+            font-size: 18px;
+            width: fit-content;
+            margin: 10px auto;
+            background: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        #trade-amount {
+            font-weight: 700;
+            text-align: center;
+            display: none;
+        }
+
+        #buy-button {
+            margin: 0 auto 5px;
+            width:98%;
+            display: block;
+            padding: 5px 10px;
+            background-color: greenyellow;
+            border-radius: 10px;
+            font-weight: 800;
+        }
+
+        #sell-button {
+            margin: 0 auto;
+            width:98%;
+            display: block;
+            padding: 5px 10px;
+            background-color: red;
+            border-radius: 10px;
+            font-weight: 800;
+        }
+
+        p {
+  font-size: 18px;
+    font-weight: 700;
+}
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Logo -->
+        <div class="logo">
+            <a href="index.html"><img src="img/BlockTrades.png" alt="Logo"></a>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav id="menu">
+            <a href="index.html">Home</a>
+            <a href="games.html">Games</a>
+        </nav>
+
+        <!-- Hamburger Icon for Mobile -->
+        <div class="hamburger" id="hamburger">
+            <div></div>
+            <div></div>
+        </div>
+    </header>
+
+    <canvas id="candlestick-chart"></canvas>
+    <div id="controls">
+        <div id="balance">Balance: 500.00 CTX</div>
+        <button id="reset-balance-button">Reset Balance</button>
+
+        <div>
+            <input type="number" id="trade-amount" value="100" min="100" max="100" step="1">
+        </div>
+        <div>
+            <button id="buy-button">BUY</button>
+            <button id="sell-button">SELL</button>
+        </div>
+    </div>
+
+    <div id="open-trades" class="trades-container">
+        <h3 class="trades-header">Open Trades</h3>
+    </div>
+
+    <div id="closed-trades" class="trades-container">
+        <h3 class="trades-header">Closed Trades</h3>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section contact">
+                <h3>Contact Us</h3>
+                <p>Email:<br>the10webdev@gmail.com</p>
+            </div>
+            <div class="footer-section social">
+                <h3>Follow Us</h3>
+                <a href="#"><i class="fa fa-youtube-play" style="font-size:48px;color:red"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-navigation">
+                <a href="index.html">Home</a>
+                <a href="games.html">Games</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <p>&copy; 2024 Chain Gaming Labs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const candles = [];
+        const chartPaddingTop = 20;
+        const chartPaddingBottom = 30;
+        const candleWidth = 10;
+        const candleSpacing = 5;
+        const chartPaddingRight = 50;
+        let currentPrice = 250;
+        let minPrice = 0;
+        let maxPrice = 500;
+        const chartHeight = 400;
+
+        let balance = 500.00;
+        const openTrades = [];
+        const closedTrades = [];
+        const tradeMarkers = [];
+
+        const canvas = document.getElementById("candlestick-chart");
+        const ctx = canvas.getContext("2d");
+
+        // Reset Balance Function
+            function resetBalance() {
+                balance = 500.00; // Reset balance to initial value
+                document.getElementById("balance").innerText = `Balance: ${balance.toFixed(2)} CTX`;
+                openTrades.length = 0; // Clear all open trades
+                closedTrades.length = 0; // Clear all closed trades
+                tradeMarkers.length = 0; // Clear all trade markers
+                renderOpenTrades(); // Update open trades display
+                renderClosedTrades(); // Update closed trades display
+                renderChart(); // Redraw the chart
+            }
+
+            // Add Event Listener to Reset Button
+            document.getElementById("reset-balance-button").addEventListener("click", resetBalance);
+
+
+        canvas.height = chartHeight;
+
+        function updateCanvasWidth() {
+            canvas.width = window.innerWidth;
+        }
+
+        updateCanvasWidth();
+        window.addEventListener("resize", updateCanvasWidth);
+
+        function drawCurrentPriceLine() {
+            const currentPriceY = chartHeight - chartPaddingBottom - (currentPrice - minPrice) * ((chartHeight - chartPaddingTop - chartPaddingBottom) / (maxPrice - minPrice));
+            ctx.beginPath();
+            ctx.moveTo(0, currentPriceY);
+            ctx.lineTo(canvas.width - chartPaddingRight, currentPriceY);
+            ctx.strokeStyle = "blue";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            const priceText = `${currentPrice.toFixed(2)}`;
+            const rectWidth = ctx.measureText(priceText).width + 5;
+            const rectHeight = 20;
+
+            ctx.fillStyle = "blue";
+            ctx.fillRect(canvas.width - rectWidth - 5, currentPriceY - rectHeight / 2, rectWidth, rectHeight);
+
+            ctx.fillStyle = "white";
+            ctx.font = "12px Arial";
+            ctx.fillText(priceText, canvas.width - rectWidth, currentPriceY + 5);
+        }
+
+        function drawCandlestick(candle, x) {
+            const openY = chartHeight - chartPaddingBottom - (candle.open - minPrice) * ((chartHeight - chartPaddingTop - chartPaddingBottom) / (maxPrice - minPrice));
+            const closeY = chartHeight - chartPaddingBottom - (candle.close - minPrice) * ((chartHeight - chartPaddingTop - chartPaddingBottom) / (maxPrice - minPrice));
+            const highY = chartHeight - chartPaddingBottom - (candle.high - minPrice) * ((chartHeight - chartPaddingTop - chartPaddingBottom) / (maxPrice - minPrice));
+            const lowY = chartHeight - chartPaddingBottom - (candle.low - minPrice) * ((chartHeight - chartPaddingTop - chartPaddingBottom) / (maxPrice - minPrice));
+
+            ctx.beginPath();
+            ctx.moveTo(x + candleWidth / 2, highY);
+            ctx.lineTo(x + candleWidth / 2, lowY);
+            ctx.strokeStyle = candle.close > candle.open ? "green" : "red";
+            ctx.stroke();
+
+            const bodyHeight = Math.abs(openY - closeY);
+            const bodyY = Math.min(openY, closeY);
+            ctx.fillStyle = candle.close > candle.open ? "green" : "red";
+            ctx.fillRect(x, bodyY, candleWidth, bodyHeight);
+        }
+
+        function generateCandle() {
+            const lastPrice = candles.length > 0 ? candles[candles.length - 1].close : currentPrice;
+            let newPrice = lastPrice + (Math.random() * 10 - 5);
+            newPrice = newPrice < 0 ? 0 : newPrice > 500 ? 500 : newPrice;
+
+            const openPrice = newPrice;
+            const closePrice = openPrice + (Math.random() * 10 - 5);
+            const highPrice = Math.max(openPrice, closePrice) + Math.random() * 5;
+            const lowPrice = Math.min(openPrice, closePrice) - Math.random() * 5;
+
+            candles.push({
+                open: openPrice,
+                close: closePrice,
+                high: highPrice,
+                low: lowPrice,
+                timestamp: new Date(),
+            });
+
+            currentPrice = closePrice;
+
+            renderChart();
+        }
+
+        function renderChart() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const visibleCandles = candles.slice(-Math.floor((canvas.width - chartPaddingRight) / (candleWidth + candleSpacing)));
+            const currentMaxPrice = Math.max(...visibleCandles.map(c => c.high)) + 10;
+            const currentMinPrice = Math.min(...visibleCandles.map(c => c.low)) - 10;
+
+            maxPrice = currentMaxPrice;
+            minPrice = currentMinPrice;
+
+            const startX = Math.max(canvas.width - (visibleCandles.length * (candleWidth + candleSpacing)) - chartPaddingRight, 0);
+
+            visibleCandles.forEach((candle, index) => {
+                const x = startX + index * (candleWidth + candleSpacing);
+                drawCandlestick(candle, x);
+            });
+
+            tradeMarkers.forEach(marker => {
+                const markerY = chartHeight - chartPaddingBottom - (marker.price - minPrice) * ((chartHeight - chartPaddingTop - chartPaddingBottom) / (maxPrice - minPrice));
+                ctx.beginPath();
+                ctx.arc(marker.x, markerY, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = marker.type === "buy" ? "green" : "red";
+                ctx.fill();
+            });
+
+            drawCurrentPriceLine();
+        }
+
+        function openTrade(type, amount) {
+            if (balance < amount) {
+                alert("Insufficient balance to open this trade.");
+                return;
+            }
+
+            const openTime = new Date();
+            const trade = {
+                type,
+                amount,
+                openTime,
+                openPrice: currentPrice,
+                profitLoss: 0,
+            };
+            openTrades.push(trade);
+
+            // Add trade marker
+            tradeMarkers.push({
+                x: canvas.width - chartPaddingRight,
+                price: currentPrice,
+                type,
+            });
+
+            updateBalance(-amount);
+            renderOpenTrades();
+        }
+
+        function closeTrade(index) {
+            const trade = openTrades[index];
+            const closePrice = currentPrice;
+            const profitLoss = trade.type === "buy" ? closePrice - trade.openPrice : trade.openPrice - closePrice;
+
+            trade.profitLoss = profitLoss;
+            updateBalance(trade.amount + profitLoss); // Adjust balance with trade amount and P/L
+
+            // Add the closed trade to the beginning of the closedTrades array
+            closedTrades.unshift({ ...trade, closeTime: new Date(), closePrice });
+
+            // Remove marker
+            tradeMarkers.splice(index, 1);
+
+            openTrades.splice(index, 1); // Remove the trade from open trades
+
+            renderOpenTrades();
+            renderClosedTrades();
+        }
+
+        function updateBalance(amount) {
+            balance += amount;
+            document.getElementById("balance").innerText = `Balance: ${balance.toFixed(2)} CTX`;
+        }
+        
+
+        function renderOpenTrades() {
+    const openTradesDiv = document.getElementById("open-trades");
+    openTradesDiv.innerHTML = "<h3 class='trades-header'>Open Trades</h3>";
+
+    openTrades.forEach((trade, index) => {
+        const tradeDiv = document.createElement("div");
+        tradeDiv.classList.add("trade");
+        tradeDiv.classList.add(trade.type === "buy" ? "green" : "red");
+
+        const updateTradeDetails = () => {
+            const runningProfitLoss = trade.type === "buy" 
+                ? currentPrice - trade.openPrice 
+                : trade.openPrice - currentPrice;
+            
+
+            const tradeDetails = `${trade.type === "buy" ? "Buy ↑" : "Sell ↓"} | 
+                                  Amount: ${trade.amount} CTX | 
+                                  Open Price: ${trade.openPrice.toFixed(2)} CTX | 
+                                  Running P/L: ${runningProfitLoss.toFixed(2)} CTX 
+                                  <button onclick="closeTrade(${index})">Close</button>`;
+
+            tradeDiv.innerHTML = tradeDetails;
+        };
+
+        // Initial render of trade details
+        updateTradeDetails();
+        openTradesDiv.appendChild(tradeDiv);
+
+        // Set interval to update the trade details every 500ms
+        setInterval(updateTradeDetails, 500);
+    });
+}
+
+
+        function renderClosedTrades() {
+            const closedTradesDiv = document.getElementById("closed-trades");
+            closedTradesDiv.innerHTML = "<h3 class='trades-header'>Closed Trades</h3>";
+
+            closedTrades.forEach((trade) => {
+                const tradeDiv = document.createElement("div");
+                tradeDiv.classList.add("trade");
+                tradeDiv.classList.add(trade.profitLoss >= 0 ? "green" : "red");
+
+                const tradeDetails = `${trade.type === "buy" ? "Buy ↑" : "Sell ↓"} | 
+                                      Amount: ${trade.amount} CTX | 
+                                      Open Time: ${trade.openTime.toLocaleTimeString()} | 
+                                      Close Time: ${trade.closeTime.toLocaleTimeString()} | 
+                                      Open Price: ${trade.openPrice.toFixed(2)} CTX | 
+                                      Close Price: ${trade.closePrice.toFixed(2)} CTX | 
+                                      P/L: ${trade.profitLoss.toFixed(2)} CTX`;
+
+                tradeDiv.innerHTML = tradeDetails;
+                closedTradesDiv.appendChild(tradeDiv);
+            });
+        }
+
+        document.getElementById("buy-button").addEventListener("click", () => {
+            const amount = parseFloat(document.getElementById("trade-amount").value);
+            openTrade("buy", amount);
+        });
+
+        document.getElementById("sell-button").addEventListener("click", () => {
+            const amount = parseFloat(document.getElementById("trade-amount").value);
+            openTrade("sell", amount);
+        });
+
+        setInterval(generateCandle, 500);
+    </script>
+</body>
+</html>

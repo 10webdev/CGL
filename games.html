@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chain Gaming Labs | Games</title>
+    <link rel="icon" href="img/icon.webp">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <header>
+        <!-- Logo -->
+        <div class="logo">
+            <a href="index.html"><img src="img/cgl.png" alt="Logo"></a>
+        </div>
+    
+        <!-- Navigation Menu -->
+        <nav id="menu">
+            <a href="index.html">Home</a>
+            <a href="games.html">Games</a>
+        </nav>
+    
+        <!-- Hamburger Icon for Mobile -->
+        <div class="hamburger" id="hamburger">
+            <div></div>
+            <div></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="about">
+        <h2>Welcome to the Ultimate Gaming Experience!</h2>
+
+        <p>Welcome to the Ultimate Gaming Experience!
+        
+        We're excited to have you here at Chain Gaming Labs, where the thrill of the game meets the power of blockchain. Dive
+        into our innovative games and explore new worlds, conquer challenges, and compete with players from around the globe.
+        
+        Ready to play? Join us now and embark on your gaming adventure!</p>
+        </div>
+
+        <div class="features">
+            <!-- Card 1 -->
+            <div class="feature-card">
+                <img src="img/BlockTrades.png" alt="Chain CFD" style="width: 100%;">
+                <h3>Chain CFD Trading Game</h3>
+                <p>
+                    Blockchain ensures every transaction and action is traceable, fostering trust in our gaming ecosystem.
+                </p>
+                <a href="ccfd.html">Play Now</a>
+            </div>
+        
+            <!-- Card 2 -->
+            <div class="feature-card">
+                <img src="img/balloon.png" alt="Balloon Pump" style="width: 100%;">
+                <h3>Balloon Pump</h3>
+                <p>
+                    Advanced security measures keep your data and assets safe while you enjoy a seamless gaming experience.
+                </p>
+                <a href="balloonpump.html" >Play Now</a>
+            </div>
+        
+            <!-- Card 3 -->
+            <div class="feature-card">
+                <img src="img/innovation.png" alt="Innovation Icon">
+                <h3>Ball Hunter</h3>
+                <p>
+                    Coming Soon. Under development...
+                </p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="feature-card">
+                <img src="img/innovation.png" alt="Innovation Icon">
+                <h3>Minty Coin</h3>
+                <p>
+                    Coming Soon. Under development...
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section contact">
+                <h3>Contact Us</h3>
+                <p>Email:<br>the10webdev@gmail.com</p>
+            </div>
+
+            <div class="footer-section social">
+                <h3>Follow Us</h3>
+                <a href="#"><i class="fa fa-youtube-play" style="font-size:48px;color:red"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-navigation">
+                <a href="index.html">Home</a>
+                <a href="games.html">Games</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+            </div>
+            <p>&copy; 2024 Chain Gaming Labs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+
+        hamburger.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+    </script>
+
+</body>
+
+</html>
