@@ -205,6 +205,17 @@
     </footer>
 
     <script>
+        // Toggle mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const menu = document.getElementById('menu');
+
+        hamburger.addEventListener('click', () => {
+            menu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+    </script>
+
+    <script>
         const candles = [];
         const chartPaddingTop = 20;
         const chartPaddingBottom = 30;
